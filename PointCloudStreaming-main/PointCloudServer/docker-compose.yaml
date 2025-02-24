@@ -19,7 +19,7 @@ services:
     networks:
       - tc
     cap_add:
-      - NET_ADMIN
+      - NET_ADMIN 
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
