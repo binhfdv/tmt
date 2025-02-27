@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directories
-folder1="/workspaces/tmt"
+folder1="/workspaces/tmt/float_occupancymap"
 folder2="/workspaces/tmt/PointCloudStreaming-main/PointCloudServer/media/ply_input"
 
 # Delay in milliseconds (19ms)

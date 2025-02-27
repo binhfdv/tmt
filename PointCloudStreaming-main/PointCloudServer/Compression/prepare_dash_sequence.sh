@@ -102,12 +102,22 @@ done
 # pointcloudserver mpd --pretty --outputFile ${OUTPUT_DIR}/mpd.xml --framesPerSecond ${FPS} --baseUrl ${BASE_URL} ${OUTPUT_DIR}
 
 ply_path=${INPUT_DIR}
-# filename=$(basename "$ply_path")
-# drc_filename="${filename%.ply}.drc"
+filename=$(basename "$ply_path")
+drc_filename="${filename%.ply}.drc"
 
+LOG_FILE="./compression_time.log"
+if [ ! -f "$LOG_FILE" ]; then
+    touch "$LOG_FILE"
+    echo "Log file created: $LOG_FILE"
+fi
 
-
+start_time=$(date +%s%3N)  # Record the start time
 # Encode PLY → DRC and send to stdout (no file I/O)
 draco_encoder -point_cloud -i "$ply_path" -qp ${QPS} -qt ${QT} -qn ${QN} -qg ${QG} -cl ${CL} -o /dev/stdout
 
+end_time=$(date +%s%3N)  # Record the end time
+execution_time=$((end_time - start_time))  # Calculate the difference
 
+echo -e "\n$(date '+%Y-%m-%d %H:%M:%S') - File: $drc_filename --- Compression time: $execution_time miliseconds" >> "$LOG_FILE"
+
+echo "Compression time logged to $LOG_FILE"
