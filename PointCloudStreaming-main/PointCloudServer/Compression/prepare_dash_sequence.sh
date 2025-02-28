@@ -111,13 +111,21 @@ if [ ! -f "$LOG_FILE" ]; then
     echo "Log file created: $LOG_FILE"
 fi
 
-start_time=$(date +%s%3N)  # Record the start time
+start_time=$(date +%s%3N)  # Record the start time in milliseconds
+start_time_human=$(date '+%Y-%m-%d %H:%M:%S')$(date +%3N)  # Human-readable start time with milliseconds
+
 # Encode PLY → DRC and send to stdout (no file I/O)
 draco_encoder -point_cloud -i "$ply_path" -qp ${QPS} -qt ${QT} -qn ${QN} -qg ${QG} -cl ${CL} -o /dev/stdout
 
-end_time=$(date +%s%3N)  # Record the end time
-execution_time=$((end_time - start_time))  # Calculate the difference
+end_time=$(date +%s%3N)  # Record the end time in milliseconds
+end_time_human=$(date '+%Y-%m-%d %H:%M:%S')$(date +%3N)  # Human-readable end time with milliseconds
+execution_time=$((end_time - start_time))  # Calculate the difference in milliseconds
 
-echo -e "\n$(date '+%Y-%m-%d %H:%M:%S') - File: $drc_filename --- Compression time: $execution_time miliseconds" >> "$LOG_FILE"
+# Get current time for logging (including milliseconds)
+current_time=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Format output with start and end time in milliseconds, and log the execution time
+echo -e "\nStart Time: $start_time_human - End Time: $end_time_human - File: $drc_filename --- Compression time: $execution_time milliseconds" >> "$LOG_FILE"
 
 echo "Compression time logged to $LOG_FILE"
+
